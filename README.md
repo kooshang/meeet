@@ -1,2 +1,0 @@
-# meeet
-anatomy1402
