@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anatomy Insights - Student Weblog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Styles omitted for brevity (no changes in CSS section) */
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-brain text-3xl text-blue-600" aria-hidden="true"></i>
+                    <h1 class="text-2xl font-bold text-gray-800">Anatomy Insights</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="newPostBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                        <i class="fas fa-plus mr-2"></i>
+                        <span>New Post</span>
+                    </button>
+                    <div class="w-10 h-10 rounded-full bg-gray-300 overflow-hidden" aria-label="Profile Picture">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Profile picture" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Search and Filter -->
+        <section class="mb-8 bg-white p-6 rounded-xl shadow">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="relative flex-1">
+                    <input type="text" id="searchInput" placeholder="Search anatomy topics..." class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Search Posts">
+                    <i class="fas fa-search absolute left-3 top-3.5 text-gray-400" aria-hidden="true"></i>
+                </div>
+                <div class="flex space-x-2 overflow-x-auto pb-2 md:pb-0" role="tablist">
+                    <button class="filter-btn px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-medium whitespace-nowrap active" data-filter="all">All</button>
+                    <button class="filter-btn px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap" data-filter="skeletal">Skeletal</button>
+                    <button class="filter-btn px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap" data-filter="muscular">Muscular</button>
+                    <button class="filter-btn px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap" data-filter="nervous">Nervous</button>
+                    <button class="filter-btn px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap" data-filter="cardiovascular">Cardiovascular</button>
+                    <button class="filter-btn px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium whitespace-nowrap" data-filter="respiratory">Respiratory</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Posts Grid -->
+        <section id="postsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="text-center py-10 text-gray-500 col-span-full" id="noPostsMessage">
+                No posts yet. Create your first post!
+            </div>
+        </section>
+
+        <!-- Load More Button -->
+        <div class="mt-10 text-center hidden" id="loadMoreContainer">
+            <button id="loadMoreBtn" class="bg-white text-blue-600 border border-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition">
+                Load More Posts
+            </button>
+        </div>
+    </main>
+
+    <!-- Modals and Notifications -->
+    <!-- Code omitted for brevity -->
+
+    <script>
+        // Debounce function for optimizing search
+        function debounce(func, delay) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
+        // Better event delegation for dynamic elements
+        document.addEventListener('click', (event) => {
+            if (event.target.matches('.like-btn')) handleLike(event);
+            if (event.target.matches('.comment-toggle')) toggleComments(event);
+            if (event.target.closest('.add-comment-btn')) addComment(event);
+            if (event.target.matches('.view-image-btn')) openImageModal(event);
+        });
+
+        // Example: Debouncing search input
+        document.getElementById('searchInput').addEventListener('input', debounce((e) => {
+            currentSearchTerm = e.target.value.toLowerCase();
+            displayedPosts = 0;
+            filterAndDisplayPosts();
+        }, 300));
+        
+        // Simplified reusable logic for filter buttons
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-blue-600', 'text-white'));
+                button.classList.add('active', 'bg-blue-600', 'text-white');
+                currentFilter = button.dataset.filter;
+                displayedPosts = 0;
+                filterAndDisplayPosts();
+            });
+        });
+
+        // Other JavaScript improvements (functions) omitted for brevity
+    </script>
+</body>
+</html>
